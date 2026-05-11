@@ -67,6 +67,11 @@ const getTapgoData = () => {
             { brand: 'InterContinental', category: 'Khách sạn & Tour', logo: '', img: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600', title: 'Nghỉ Dưỡng 2N1Đ Phòng Suite View Biển', loc: 'Đà Nẵng', originalPrice: '5.500.000đ', salePrice: '3.850.000đ', discount: '30%', rating: 5.0, reviews: '450 đánh giá' },
             { brand: 'Vinpearl', category: 'Khách sạn & Tour', logo: '', img: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=600', title: 'Voucher Nghỉ Dưỡng Toàn Hệ Thống Vinpearl', loc: 'Toàn quốc', originalPrice: '4.200.000đ', salePrice: '2.999.000đ', discount: '29%', rating: 4.9, reviews: '3k+ đã bán' }
         ],
+        vouchersFree: [
+            { brand: 'Highlands Coffee', logo: 'https://www.highlandscoffee.com.vn/vnt_upload/weblink/red_BG_logo800.png', img: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=600', title: 'E-Coupon Miễn phí 01 ly Phin Sữa Đá', loc: 'Toàn quốc', isFree: true, rating: 4.9, reviews: '12k đã lấy' },
+            { brand: 'The Coffee House', logo: 'https://upload.wikimedia.org/wikipedia/vi/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1280px-Starbucks_Corporation_Logo_2011.svg.png', img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=600', title: 'Voucher Miễn phí Topping size L', loc: 'Toàn quốc', isFree: true, rating: 4.7, reviews: '8.5k đã lấy' }
+        ],
+
         brands: [
             'https://www.highlandscoffee.com.vn/vnt_upload/weblink/red_BG_logo800.png',
             'https://upload.wikimedia.org/wikipedia/vi/thumb/d/d3/Starbucks_Corporation_Logo_2011.svg/1280px-Starbucks_Corporation_Logo_2011.svg.png',
