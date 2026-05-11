@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TAPGO - Chi tiết sản phẩm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="data.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Be Vietnam Pro', 'sans-serif'] },
+                    colors: {
+                        brand: { DEFAULT: '#F48133', hover: '#E06B1F', bg: '#FFF3EB' },
+                        danger: '#EF4444', success: '#10B981'
+                    }
+                },
+                screens: {
+                    'sm': '9999px', 'md': '9999px', 'lg': '9999px', 'xl': '9999px', '2xl': '9999px'
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --mobile-width: 428px;
+        }
+
+        body {
+            background-color: transparent !important;
+            font-family: 'Be Vietnam Pro', sans-serif !important;
+            max-width: var(--mobile-width) !important;
+            margin: 0 auto !important;
+            min-height: 100dvh !important;
+            box-shadow: 0 0 100px rgba(0,0,0,0.1) !important;
+            position: relative !important;
+            overflow-x: hidden !important;
+            padding-bottom: 90px !important;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .pt-safe {
+            padding-top: 47px;
+        }
+
+        .status-bar-mock {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: var(--mobile-width);
+            height: 47px;
+            z-index: 2000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 32px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff; /* White for dark images */
+            pointer-events: none;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .tab-active {
+            color: #F48133 !important;
+            border-bottom: 3px solid #F48133 !important;
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        * {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        /* DA NANG SIGNATURE BACKGROUND */
+        .danang-vibe-bg {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: var(--mobile-width);
+            height: 100%;
+            background: linear-gradient(rgba(250, 250, 250, 0.88), rgba(250, 250, 250, 0.88)), url('danang_dragon_bridge_bg_1778333910476.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center bottom;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body x-data="{ ...getTapgoData(), tab: 'mota' }" class="text-gray-900 antialiased font-sans flex flex-col min-h-screen">
+    <!-- DA NANG SIGNATURE BACKGROUND LAYER -->
+    <div class="danang-vibe-bg"></div>
+
+    <!-- STATUS BAR MOCKUP -->
+    <div 
+        x-data="{ scrolled: false }" 
+        @window.scroll.window="scrolled = (window.pageYOffset > 50)"
+        :class="scrolled ? 'text-gray-900' : 'text-white'"
+        class="status-bar-mock transition-colors duration-300">
+        <div class="flex-1">9:41</div>
+        <div class="flex gap-1.5 items-center">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- MOBILE HEADER STICKY -->
+    <header 
+        x-data="{ scrolled: false }" 
+        @window.scroll.window="scrolled = (window.pageYOffset > 50)"
+        :class="scrolled ? 'bg-white shadow-md border-b border-gray-100' : 'bg-transparent'"
+        class="fixed top-0 left-50 -translate-x-50 w-full max-w-[428px] z-[100] transition-all duration-300">
+        <div class="px-4 pt-safe pb-2 flex items-center justify-between">
+            <a href="category_website.html" 
+                :class="scrolled ? 'text-gray-900 bg-gray-50' : 'text-white bg-white/20 backdrop-blur-md border-white/30'"
+                class="w-10 h-10 flex items-center justify-center border rounded-full shadow-lg transition-all">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            <div x-show="scrolled" x-transition class="flex-1 px-4 truncate">
+                <p class="text-xs font-black text-gray-900 truncate">Combo Thịt Nướng Nhật Bản...</p>
+            </div>
+            <div class="flex gap-2">
+                <button 
+                    :class="scrolled ? 'text-gray-900 bg-gray-50' : 'text-white bg-white/20 backdrop-blur-md border-white/30'"
+                    class="w-10 h-10 flex items-center justify-center border rounded-full shadow-lg transition-all">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <button 
+                    :class="scrolled ? 'text-gray-900 bg-gray-50' : 'text-white bg-white/20 backdrop-blur-md border-white/30'"
+                    class="w-10 h-10 flex items-center justify-center border rounded-full shadow-lg transition-all">
+                    <i class="fas fa-share-alt"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full">
+        <!-- Hero Gallery Scroller -->
+        <div class="relative w-full aspect-square overflow-hidden bg-gray-200">
+            <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?q=80&w=800" class="w-full h-full object-cover">
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5">
+                <div class="w-6 h-1.5 bg-brand rounded-full"></div>
+                <div class="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
+                <div class="w-1.5 h-1.5 bg-white/50 rounded-full"></div>
+            </div>
+        </div>
+
+        <div class="p-5 space-y-6 -mt-8 bg-white rounded-t-[3rem] relative z-10 shadow-[0_-20px_40px_rgba(0,0,0,0.05)]">
+            <!-- Product Info -->
+            <div class="space-y-3">
+                <div class="flex items-center gap-2">
+                    <span class="bg-brand/10 text-brand text-[10px] font-bold px-2 py-0.5 rounded-lg uppercase">Ăn uống</span>
+                    <span class="text-gray-400 text-xs flex items-center gap-1">
+                        <i class="fas fa-star text-yellow-400"></i> 4.8 (120+ Đánh giá)
+                    </span>
+                </div>
+                <h1 class="text-xl font-bold text-gray-900 leading-snug">Combo Thịt Nướng Nhật Bản Bao Gồm Lẩu VIP cho 2 người</h1>
+                <div class="flex items-center justify-between">
+                    <div class="space-y-0.5">
+                        <div class="flex items-baseline gap-2">
+                            <span class="text-2xl font-black text-brand">189.000đ</span>
+                            <span class="text-xs text-gray-400 line-through">250.000đ</span>
+                        </div>
+                        <p class="text-[11px] text-success font-bold"><i class="fas fa-fire mr-1"></i> Tiết kiệm 61.000đ (24%)</p>
+                    </div>
+                    <div class="bg-gray-50 p-2 rounded-2xl text-center min-w-[70px] border border-gray-100">
+                        <p class="text-[9px] text-gray-400 font-bold uppercase">Hết hạn sau</p>
+                        <p class="text-xs font-bold text-gray-800">12 Ngày</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation (Removed Sticky as requested) -->
+            <div class="flex border-b border-gray-100 bg-white z-20 -mx-5 px-5">
+                <button @click="tab = 'mota'" :class="tab === 'mota' ? 'tab-active' : 'text-gray-400'" class="flex-1 py-4 text-[13px] font-bold transition-all">Mô tả</button>
+                <button @click="tab = 'sudung'" :class="tab === 'sudung' ? 'tab-active' : 'text-gray-400'" class="flex-1 py-4 text-[13px] font-bold transition-all">Sử dụng</button>
+                <button @click="tab = 'danhgia'" :class="tab === 'danhgia' ? 'tab-active' : 'text-gray-400'" class="flex-1 py-4 text-[13px] font-bold transition-all">Đánh giá</button>
+            </div>
+
+            <!-- Tab Contents -->
+            <div class="space-y-6 py-2">
+                <!-- Tab: Mô tả -->
+                <div x-show="tab === 'mota'" class="space-y-6 animate-fadeIn" x-transition>
+                    <!-- Brand Summary Box -->
+                    <div class="flex items-center gap-4 p-4 bg-brand-bg rounded-3xl border border-brand/20">
+                        <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?q=80&w=100" class="w-14 h-14 rounded-2xl object-cover shadow-sm">
+                        <div class="flex-1">
+                            <p class="font-black text-gray-900 text-sm uppercase">YAKIMONO</p>
+                            <p class="text-[11px] text-gray-500 font-medium">Nhà hàng Thịt Nướng Nhật Bản</p>
+                            <div class="flex items-center gap-1 mt-1">
+                                <i class="fas fa-star text-brand text-[10px]"></i>
+                                <span class="text-[11px] font-black">4.8</span>
+                                <span class="text-[10px] text-gray-400">· 82 đánh giá · 15 cơ sở</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h2 class="text-lg font-black text-gray-900 leading-tight">Thịt Nướng Nhật Bản Thượng Hạng – Hương Vị Chuẩn Wagyu</h2>
+                        <p class="text-[13px] text-gray-600 leading-relaxed">Yakimono mang đến trải nghiệm thịt nướng Nhật Bản đích thực với nguyên liệu nhập khẩu trực tiếp từ Nhật, quy trình chế biến chuẩn mực và không gian thưởng thức sang trọng. Mỗi phần thịt được tuyển chọn kỹ lưỡng, ướp gia vị đặc trưng và nướng trực tiếp trên bếp than hoa truyền thống Nhật Bản.</p>
+                        <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=800" class="w-full rounded-[2rem] shadow-md">
+                    </div>
+
+                    <!-- Features Grid -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
+                            <i class="fas fa-clock text-brand text-xl mb-2"></i>
+                            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Thời gian</p>
+                            <p class="font-black text-xs">90 phút</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
+                            <i class="fas fa-users text-brand text-xl mb-2"></i>
+                            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Số người</p>
+                            <p class="font-black text-xs">02 người</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
+                            <i class="fas fa-map-marker-alt text-brand text-xl mb-2"></i>
+                            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Chi nhánh</p>
+                            <p class="font-black text-xs">15 cơ sở</p>
+                        </div>
+                        <div class="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
+                            <i class="fas fa-calendar-alt text-brand text-xl mb-2"></i>
+                            <p class="text-[9px] text-gray-400 font-bold uppercase tracking-widest">Hạn dùng</p>
+                            <p class="font-black text-xs">31/12/2025</p>
+                        </div>
+                    </div>
+
+                    <!-- Inclusions -->
+                    <div class="space-y-4">
+                        <h3 class="font-black text-sm text-gray-900 flex items-center gap-2">
+                            <i class="fas fa-check-circle text-success"></i> Bao gồm trong Voucher
+                        </h3>
+                        <ul class="space-y-3 pl-1">
+                            <template x-for="item in [
+                                'Set thịt nướng Nhật 2 người (Bò Wagyu + Cừu non)',
+                                '2 phần rau củ nướng assorted',
+                                '2 suất cơm rang hoặc mì rang (chọn 1)',
+                                '2 phần tráng miệng bánh mochi',
+                                'Nước lọc không giới hạn'
+                            ]">
+                                <li class="flex items-start gap-3 text-[13px] text-gray-600">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-brand mt-1.5 shrink-0"></span>
+                                    <span x-text="item"></span>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tab: Sử dụng -->
+                <div x-show="tab === 'sudung'" class="space-y-6 animate-fadeIn" style="display:none" x-transition>
+                    <h3 class="font-black text-sm text-gray-900">Hướng dẫn đặt & sử dụng Voucher</h3>
+                    <div class="space-y-8">
+                        <div class="flex gap-4 relative">
+                            <div class="absolute left-4 top-8 bottom-0 w-[1px] bg-gray-100 -z-10"></div>
+                            <div class="w-8 h-8 bg-brand text-white rounded-full flex items-center justify-center font-black text-xs shrink-0 shadow-lg shadow-brand/20">1</div>
+                            <div class="pt-0.5">
+                                <p class="text-sm font-black text-gray-900">Mua Voucher</p>
+                                <p class="text-[12px] text-gray-500 mt-1 leading-relaxed">Nhấn "Mua ngay" và hoàn thành thanh toán. Voucher sẽ được gửi về email và mục "Voucher của tôi".</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 relative">
+                            <div class="absolute left-4 top-8 bottom-0 w-[1px] bg-gray-100 -z-10"></div>
+                            <div class="w-8 h-8 bg-brand text-white rounded-full flex items-center justify-center font-black text-xs shrink-0 shadow-lg shadow-brand/20">2</div>
+                            <div class="pt-0.5">
+                                <p class="text-sm font-black text-gray-900">Đặt bàn trước</p>
+                                <p class="text-[12px] text-gray-500 mt-1 leading-relaxed">Gọi hotline nhà hàng hoặc đặt online ít nhất 2 tiếng trước. Thông báo sử dụng Voucher TAPGO.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 relative">
+                            <div class="absolute left-4 top-8 bottom-0 w-[1px] bg-gray-100 -z-10"></div>
+                            <div class="w-8 h-8 bg-brand text-white rounded-full flex items-center justify-center font-black text-xs shrink-0 shadow-lg shadow-brand/20">3</div>
+                            <div class="pt-0.5">
+                                <p class="text-sm font-black text-gray-900">Xuất mã QR tại nhà hàng</p>
+                                <p class="text-[12px] text-gray-500 mt-1 leading-relaxed">Mở app TAPGO → "Voucher của tôi" → hiển thị mã QR để nhân viên quét khi thanh toán.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-8 h-8 bg-brand text-white rounded-full flex items-center justify-center font-black text-xs shrink-0 shadow-lg shadow-brand/20">4</div>
+                            <div class="pt-0.5">
+                                <p class="text-sm font-black text-gray-900">Tích điểm sau khi dùng</p>
+                                <p class="text-[12px] text-gray-500 mt-1 leading-relaxed">Sau khi sử dụng thành công, bạn sẽ nhận được điểm thưởng TAPGO tương ứng 5% đơn hàng.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-50 p-6 rounded-[2rem] border border-amber-100 space-y-3">
+                        <h4 class="font-black text-xs text-amber-800 flex items-center gap-2">
+                            <i class="fas fa-exclamation-triangle text-amber-500"></i> Lưu ý quan trọng
+                        </h4>
+                        <ul class="text-[11px] text-amber-700/80 space-y-2 list-disc list-inside">
+                            <li>Áp dụng tại 15 chi nhánh TP.HCM & Hà Nội.</li>
+                            <li>Không kết hợp với các khuyến mãi khác.</li>
+                            <li>Phải đặt bàn trước, không nhận khách walk-in.</li>
+                            <li>Voucher không có giá trị quy đổi thành tiền mặt.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tab: Đánh giá -->
+                <div x-show="tab === 'danhgia'" class="space-y-8 animate-fadeIn" style="display:none" x-transition>
+                    <!-- Rating Summary -->
+                    <div class="flex gap-8 items-center bg-gray-50/50 p-6 rounded-[2.5rem] border border-gray-100">
+                        <div class="text-center">
+                            <div class="text-5xl font-black text-brand leading-none">4.8</div>
+                            <div class="flex gap-0.5 text-brand text-[10px] mt-2 justify-center">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <p class="text-[10px] text-gray-400 font-bold mt-1 uppercase tracking-widest">82 Đánh giá</p>
+                        </div>
+                        <div class="flex-1 space-y-2.5">
+                            <template x-for="(w, i) in ['72%', '20%', '6%', '2%', '0%']">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[10px] font-bold text-gray-300 w-2" x-text="5-i"></span>
+                                    <div class="flex-1 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                                        <div class="h-full bg-brand" :style="'width: '+w"></div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Review List -->
+                    <div class="space-y-8">
+                        <div class="border-b border-gray-50 pb-8">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-gradient-to-br from-brand to-orange-300 rounded-full flex items-center justify-center text-white font-black text-xs shadow-md">T</div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm font-black text-gray-900">Trần Minh Khoa</p>
+                                        <span class="text-[10px] text-gray-400 font-medium">2 ngày trước</span>
+                                    </div>
+                                    <div class="flex gap-0.5 text-brand text-[9px] mt-0.5"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                                </div>
+                            </div>
+                            <p class="text-[13px] text-gray-600 leading-relaxed font-medium">Thịt chất lượng cực cao, không gian nhà hàng rất chill và sang trọng. Voucher TAPGO dễ dùng, nhân viên thân thiện. Sẽ quay lại lần sau!</p>
+                            <div class="flex gap-2 mt-4">
+                                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=200" class="w-20 h-20 rounded-2xl object-cover border border-gray-100 shadow-sm">
+                                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=200" class="w-20 h-20 rounded-2xl object-cover border border-gray-100 shadow-sm">
+                            </div>
+                        </div>
+
+                        <div class="border-b border-gray-50 pb-8">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-purple-400 rounded-full flex items-center justify-center text-white font-black text-xs shadow-md">L</div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm font-black text-gray-900">Lê Thu Hương</p>
+                                        <span class="text-[10px] text-gray-400 font-medium">5 ngày trước</span>
+                                    </div>
+                                    <div class="flex gap-0.5 text-brand text-[9px] mt-0.5"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                                </div>
+                            </div>
+                            <p class="text-[13px] text-gray-600 leading-relaxed font-medium">Đặt voucher cho buổi hẹn hò, cả hai đều rất hài lòng. Quy trình check-in nhanh, thịt mềm và thơm. Rất đáng tiền!</p>
+                        </div>
+                    </div>
+
+                    <button class="w-full py-4 border-2 border-brand/10 text-brand font-black rounded-2xl text-[13px] uppercase tracking-wider hover:bg-brand-bg transition active:scale-[0.98]">
+                        Xem tất cả 82 đánh giá
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MOBILE STICKY BOTTOM ACTION -->
+    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[428px] bg-white border-t border-gray-100 p-4 pb-safe flex gap-4 z-[500] shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
+        <a href="booking_website.html" class="flex-1 border-2 border-brand text-brand font-bold py-3.5 rounded-2xl text-center active:scale-95 transition-transform">
+            Đặt bàn
+        </a>
+        <a href="checkout_website.html" class="flex-[1.5] bg-brand text-white font-bold py-3.5 rounded-2xl text-center shadow-lg shadow-brand/20 active:scale-95 transition-transform">
+            Mua ngay
+        </a>
+    </div>
+
+</body>
+
+</html>
