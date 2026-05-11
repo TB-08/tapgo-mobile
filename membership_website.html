@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Hạng Thành Viên - TapGO Mobile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="data.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Be Vietnam Pro', 'sans-serif'] },
+                    colors: {
+                        brand: { DEFAULT: '#F48133', hover: '#E06B1F', bg: '#FFF3EB' },
+                        silver: '#9CA3AF', gold: '#FBBF24', platinum: '#1F2937', diamond: '#06B6D4'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        [x-cloak] { display: none !important; }
+        body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #FAFAFA; -webkit-tap-highlight-color: transparent; }
+        
+        .safe-pb { padding-bottom: env(safe-area-inset-bottom); }
+        .safe-pt { padding-top: env(safe-area-inset-top); }
+
+        .danang-vibe-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('danang_dragon_bridge_bg_1778333910476.png');
+            background-size: cover; background-position: center; opacity: 0.03; pointer-events: none; z-index: -1;
+        }
+
+        .tier-slide {
+            scroll-snap-align: center;
+        }
+        .tier-scroll {
+            scroll-snap-type: x mandatory;
+        }
+        
+        .glossy-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-center-glow {
+            box-shadow: 0 0 20px rgba(244, 129, 51, 0.4);
+        }
+
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+
+<body x-data="getTapgoData()" class="flex flex-col min-h-screen pb-24">
+    <div class="danang-vibe-bg"></div>
+
+    <!-- HEADER -->
+    <header class="bg-white/90 backdrop-blur-xl sticky top-0 z-[100] border-b border-gray-100/50 pt-safe shadow-sm">
+        <div class="px-4 py-4 flex items-center gap-4">
+            <a href="home_website.html" class="w-10 h-10 bg-gray-50 rounded-2xl flex items-center justify-center text-gray-400 active:scale-90 transition-transform">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1 class="text-xl font-black text-gray-900 tracking-tight">Hạng Thành Viên</h1>
+        </div>
+    </header>
+
+    <main class="flex-1 space-y-8 mt-6">
+        <!-- USER STATUS CARD -->
+        <div class="px-4">
+            <div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-[2.5rem] p-6 text-white relative overflow-hidden shadow-2xl">
+                <!-- Abstract Design -->
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-brand/20 blur-[60px] rounded-full"></div>
+                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500/10 blur-[60px] rounded-full"></div>
+
+                <div class="flex items-center gap-4 mb-8 relative z-10">
+                    <img :src="user.avatar" class="w-16 h-16 rounded-2xl border-2 border-white/20 shadow-lg">
+                    <div>
+                        <h2 class="text-lg font-black tracking-tight" x-text="user.name"></h2>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="bg-gradient-to-r from-gold to-yellow-500 text-black text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider" x-text="'Hạng ' + user.tier"></span>
+                        </div>
+                    </div>
+                    <div class="ml-auto">
+                        <i class="fas fa-crown text-3xl text-gold/30"></i>
+                    </div>
+                </div>
+
+                <div class="space-y-3 relative z-10">
+                    <div class="flex justify-between items-end">
+                        <div class="space-y-0.5">
+                            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Điểm hiện có</p>
+                            <div class="text-3xl font-black" x-text="user.points.toLocaleString()"></div>
+                        </div>
+                        <p class="text-[10px] font-bold text-brand uppercase tracking-widest text-right">
+                            Cần <span class="text-white" x-text="(user.nextTierPoints - user.points).toLocaleString()"></span> điểm<br>để lên Bạch Kim
+                        </p>
+                    </div>
+                    
+                    <div class="h-2.5 bg-white/10 rounded-full p-0.5 overflow-hidden border border-white/5">
+                        <div class="h-full bg-gradient-to-r from-brand to-yellow-400 rounded-full"
+                            :style="'width: ' + (user.points / user.nextTierPoints * 100) + '%'"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TIER SLIDER -->
+        <div class="space-y-4">
+            <div class="px-6 flex justify-between items-end">
+                <h3 class="text-lg font-black text-gray-900 uppercase tracking-tighter">Đặc quyền các hạng</h3>
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Vuốt để xem <i class="fas fa-chevron-right ml-1"></i></span>
+            </div>
+            
+            <div class="flex overflow-x-auto hide-scrollbar tier-scroll gap-4 px-4 pb-4">
+                <template x-for="tier in tiers" :key="tier.id">
+                    <div class="tier-slide min-w-[280px] bg-white rounded-[2.5rem] p-6 border border-gray-100 shadow-xl flex flex-col items-center text-center relative"
+                        :class="user.tier === tier.id ? 'ring-2 ring-brand ring-offset-4 ring-offset-gray-50' : ''">
+                        
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br flex items-center justify-center text-white text-2xl mb-4 shadow-lg"
+                            :class="tier.color">
+                            <i class="fas" :class="'fa-' + tier.icon"></i>
+                        </div>
+                        
+                        <h4 class="text-xl font-black text-gray-900 uppercase tracking-tighter mb-1" x-text="tier.name"></h4>
+                        <p class="text-[11px] font-bold text-brand uppercase mb-6" x-text="tier.points.toLocaleString() + ' Điểm'"></p>
+                        
+                        <div class="w-full space-y-3 text-left">
+                            <template x-for="benefit in tier.benefits">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-5 h-5 bg-brand/10 rounded-lg flex items-center justify-center text-[10px] text-brand shrink-0">
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                    <span class="text-xs font-bold text-gray-600" x-text="benefit"></span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- HOW TO EARN -->
+        <div class="px-4 pb-10">
+            <div class="bg-brand rounded-[2.5rem] p-8 text-white relative overflow-hidden shadow-xl">
+                <div class="absolute top-0 right-0 p-4 opacity-10">
+                    <i class="fas fa-coins text-8xl"></i>
+                </div>
+                <h3 class="text-xl font-black mb-6 tracking-tight">Làm sao để tích điểm?</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-shopping-cart text-lg"></i>
+                        </div>
+                        <p class="text-xs font-bold leading-snug">Chi tiêu 10k = 10 điểm</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-star text-lg"></i>
+                        </div>
+                        <p class="text-xs font-bold leading-snug">Đánh giá dịch vụ = 50 điểm</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                            <i class="fas fa-user-plus text-lg"></i>
+                        </div>
+                        <p class="text-xs font-bold leading-snug">Mời bạn bè = 500 điểm</p>
+                    </div>
+                </div>
+                
+                <button class="mt-8 w-full py-4 bg-white text-brand font-black text-xs rounded-2xl shadow-xl active:scale-95 transition-transform uppercase tracking-widest">Tìm hiểu thêm</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- MOBILE BOTTOM NAVIGATION (Same as Home) -->
+    <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[428px] bg-white/90 backdrop-blur-xl border-t border-gray-100 px-2 py-2 flex justify-between items-center z-[1000] shadow-[0_-5px_20px_rgba(0,0,0,0.05)] pb-safe rounded-t-[2.5rem]">
+        <a href="home_website.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400">
+            <i class="fas fa-home text-[22px]"></i>
+            <span class="text-[10px] font-medium">Trang chủ</span>
+        </a>
+        <a href="category_website.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400">
+            <i class="fas fa-th-large text-[22px]"></i>
+            <span class="text-[10px] font-medium">Ưu đãi</span>
+        </a>
+        <div class="flex flex-col items-center gap-1 flex-1 relative -top-6">
+            <button class="w-15 h-15 p-1 bg-white rounded-full">
+                <div class="w-14 h-14 bg-gradient-to-tr from-brand to-[#FF9D5C] text-white rounded-full flex items-center justify-center shadow-lg nav-center-glow border-4 border-white transition-transform active:scale-90">
+                    <i class="fas fa-qrcode text-2xl"></i>
+                </div>
+            </button>
+            <span class="text-[10px] font-bold text-gray-800 -mt-1">Quét QR</span>
+        </div>
+        <a href="my_vouchers.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400">
+            <i class="fas fa-ticket-alt text-[22px]"></i>
+            <span class="text-[10px] font-medium">Voucher</span>
+        </a>
+        <a href="#" class="flex flex-col items-center gap-1 flex-1 text-brand">
+            <i class="fas fa-user text-[22px]"></i>
+            <span class="text-[10px] font-bold">Cá nhân</span>
+        </a>
+    </nav>
+</body>
+
+</html>
