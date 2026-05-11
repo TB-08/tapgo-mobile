@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giá» HÃ ng - TAPGO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Be Vietnam Pro', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js" defer></script>
+    <script src="data.js"></script>
+    <style>
+        body {
+            background-color: #FAFAFA !important;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(244, 129, 51, 0.25) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(255, 200, 100, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(244, 129, 51, 0.25) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(255, 100, 50, 0.1) 0px, transparent 50%) !important;
+            background-attachment: fixed !important;
+        }
+
+        .text-brand {
+            color: #F48133;
+        }
+
+        .bg-brand {
+            background-color: #F48133;
+        }
+
+        .bg-brand-hover {
+            background-color: #e06c20;
+        }
+
+        .border-brand {
+            border-color: #F48133;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+    /* Force mobile app container sizing (iPhone 12 Pro Max width logic) */
+    body {
+        max-width: 428px !important;
+        margin: 0 auto !important;
+        background-color: transparent !important;
+        box-shadow: 0 0 50px rgba(0,0,0,0.1) !important;
+        min-height: 100dvh !important;
+        position: relative !important;
+        overflow-x: hidden !important;
+        padding-bottom: 90px !important;
+    }
+    
+    /* Hide desktop headers and bars natively */
+    body > div.bg-gray-100\/90 { display: none !important; }
+    body > header:not(#mobile-header-app header) { display: none !important; }
+    .hidden.md\:block, .hidden.lg\:flex, .hidden.xl\:block { display: none !important; }
+    
+    /* Override grid columns for mobile product cards */
+    .grid-cols-3, .grid-cols-4, .grid-cols-5, .grid-cols-6, 
+    .md\:grid-cols-3, .lg\:grid-cols-4, .xl\:grid-cols-5 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+    }
+
+    /* Force 1 column on extra small elements */
+    .md\:grid-cols-2 {
+        grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    }
+    
+    /* Adjust flex directions */
+    .md\:flex-row { flex-direction: column !important; }
+    .lg\:w-1\/4, .md\:w-1\/3, .md\:w-2\/3, .w-2\/3, .w-1\/3 { width: 100% !important; }
+    
+    /* Remove huge max-width constraints */
+    .max-w-\[1280px\], .max-w-7xl, .container { 
+        max-width: 100% !important; 
+        padding-left: 1rem !important; 
+        padding-right: 1rem !important; 
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    /* Fix large paddings/margins for mobile */
+    .py-8 { padding-top: 1rem !important; padding-bottom: 1rem !important; }
+    .p-10 { padding: 1.25rem !important; }
+    .gap-8 { gap: 1rem !important; }
+    .space-y-12 > :not([hidden]) ~ :not([hidden]) { --tw-space-y-reverse: 0; margin-top: 1.5rem !important; margin-bottom: calc(1.5rem * var(--tw-space-y-reverse)) !important; }
+    
+    /* Improve typography size on mobile */
+    h1 { font-size: 24px !important; line-height: 1.2 !important; }
+    h2 { font-size: 20px !important; line-height: 1.3 !important; }
+    
+    /* DA NANG SIGNATURE BACKGROUND */
+    .danang-vibe-bg {
+        position: fixed;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 428px;
+        height: 100%;
+        background: linear-gradient(rgba(250, 250, 250, 0.88), rgba(250, 250, 250, 0.88)), url('danang_dragon_bridge_bg_1778333910476.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center bottom;
+        z-index: -1;
+        pointer-events: none;
+    }
+</style>
+<script>
+    // Overwrite tailwind breakpoints to ensure mobile classes are always used locally
+    window.tailwind = window.tailwind || {};
+    window.tailwind.config = {
+        theme: {
+            screens: { 'sm': '9999px', 'md': '9999px', 'lg': '9999px', 'xl': '9999px', '2xl': '9999px' }
+        }
+    };
+</script>
+</head>
+
+<body x-data="getTapgoData()" class="text-gray-900 antialiased font-sans flex flex-col min-h-screen">
+    <!-- DA NANG SIGNATURE BACKGROUND LAYER -->
+    <div class="danang-vibe-bg"></div>
+<div id="mobile-header-app">
+<header class="bg-white sticky top-0 z-[100] border-b border-gray-100 px-4 py-3 flex flex-col gap-3 shadow-sm">
+    <div class="flex items-center justify-between">
+        <a href="home_website.html"><img src="Tap Go-Photoroom.png" alt="TAPGO" class="h-14 w-auto object-contain"></a>
+        <div class="flex items-center gap-3">
+            <a href="my_vouchers.html" class="w-8 h-8 flex items-center justify-center bg-gray-50 rounded-full text-gray-600 relative hover:text-brand transition">
+                <i class="fa-solid fa-ticket-alt"></i>
+                <span class="absolute -top-1 -right-1 bg-brand text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-medium">5</span>
+            </a>
+            <button class="w-8 h-8 flex items-center justify-center bg-gray-50 rounded-full text-gray-600 relative hover:text-brand transition">
+                <i class="fa-regular fa-bell"></i>
+                <span class="absolute top-0 right-0 w-2.5 h-2.5 bg-danger rounded-full border border-white"></span>
+            </button>
+        </div>
+    </div>
+    <div class="flex items-center bg-gray-100 rounded-xl px-3 py-2 gap-2 border border-transparent focus-within:border-brand focus-within:bg-white transition">
+        <i class="fas fa-search text-gray-400"></i>
+        <input type="text" placeholder="TÃ¬m kiáº¿m Æ°u Ä‘Ã£i, nhÃ  hÃ ng..." class="bg-transparent border-none outline-none text-[13px] w-full text-gray-700">
+    </div>
+</header>
+</div>
+
+    <!-- HEADER MINIMAL -->
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-gray-100">
+        <div class="container mx-auto max-w-[1280px] px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-10">
+                <a href="home_website.html">
+                    <img src="Tap Go-Photoroom.png" alt="TAPGO" class="h-14 w-auto object-contain">
+                </a>
+                <span class="text-xl font-medium text-gray-800 border-l-2 border-gray-200 pl-6">Giá» hÃ ng</span>
+            </div>
+
+
+        </div>
+    </header>
+
+    <!-- CART CONTENT -->
+    <main class="flex-1 container mx-auto max-w-[1280px] px-4 py-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <!-- Left Items -->
+            <div class="lg:col-span-8 space-y-6">
+                <!-- Select all box -->
+                <div
+                    class="bg-white p-4 rounded-2xl border border-gray-100 flex justify-between items-center">
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" checked class="w-5 h-5 accent-brand rounded border-gray-300">
+                        <span class="font-bold text-gray-800">Chá»n táº¥t cáº£ (2 voucher)</span>
+                    </label>
+                    <button class="text-gray-400 hover:text-danger font-medium text-sm transition"><i
+                            class="fas fa-trash-alt mr-1"></i> XÃ³a</button>
+                </div>
+
+                <!-- Item 1 -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 flex gap-6 items-center">
+                    <input type="checkbox" checked class="w-5 h-5 accent-brand rounded border-gray-300">
+                    <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?q=80&w=200"
+                        class="w-24 h-24 object-cover rounded-xl border border-gray-100 shrink-0">
+                    <div class="flex-1">
+                        <h3 class="font-bold text-gray-900 text-lg mb-1">Combo Thá»‹t NÆ°á»›ng Nháº­t Báº£n Bao Gá»“m Láº©u 4 NgÆ°á»i
+                            VIP</h3>
+                        <p class="text-gray-500 text-sm mb-3">Yakimono ThÄƒng Long</p>
+                        <span class="bg-orange-50 text-brand text-xs font-bold px-2 py-1 rounded">E-Voucher</span>
+                    </div>
+                    <div class="text-right flex flex-col items-end gap-3">
+                        <div>
+                            <p class="text-gray-400 line-through text-sm">2,990 VND</p>
+                            <p class="text-brand font-bold text-xl"><i
+                                    class="fas fa-coins text-yellow-500 mr-1 text-[16px]"></i>1,500</p>
+                        </div>
+                        <div class="flex items-center border border-gray-200 rounded-lg bg-gray-50 overflow-hidden">
+                            <button class="px-3 py-1 hover:bg-gray-200 text-gray-500 font-bold transition">-</button>
+                            <input type="text" value="1"
+                                class="w-10 text-center bg-transparent border-none outline-none font-bold text-sm">
+                            <button class="px-3 py-1 hover:bg-gray-200 text-gray-500 font-bold transition">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div
+                    class="bg-white p-6 rounded-2xl border border-gray-100 flex gap-6 items-center opacity-60 hover:opacity-100 transition">
+                    <input type="checkbox" class="w-5 h-5 accent-brand rounded border-gray-300">
+                    <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=200"
+                        class="w-24 h-24 object-cover rounded-xl border border-gray-100 shrink-0">
+                    <div class="flex-1">
+                        <h3 class="font-bold text-gray-900 text-lg mb-1">VÃ© xem phim 2D táº¥t cáº£ cÃ¡c cá»¥m ráº¡p CGV</h3>
+                        <p class="text-gray-500 text-sm mb-3">CGV ToÃ n Quá»‘c</p>
+                        <span class="bg-orange-50 text-brand text-xs font-bold px-2 py-1 rounded">E-Voucher</span>
+                    </div>
+                    <div class="text-right flex flex-col items-end gap-3">
+                        <div>
+                            <p class="text-gray-400 line-through text-sm">130,000 VND</p>
+                            <p class="text-brand font-bold text-xl"><i
+                                    class="fas fa-coins text-yellow-500 mr-1 text-[16px]"></i>300</p>
+                        </div>
+                        <div class="flex items-center border border-gray-200 rounded-lg bg-gray-50 overflow-hidden">
+                            <button class="px-3 py-1 hover:bg-gray-200 text-gray-500 font-bold transition">-</button>
+                            <input type="text" value="2"
+                                class="w-10 text-center bg-transparent border-none outline-none font-bold text-sm">
+                            <button class="px-3 py-1 hover:bg-gray-200 text-gray-500 font-bold transition">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Summary -->
+            <div class="lg:col-span-4">
+                <div class="bg-white rounded-2xl p-6 border border-gray-100 sticky top-28">
+                    <h3 class="font-bold text-lg text-gray-900 mb-5 border-b border-gray-100 pb-3">TÃ³m táº¯t Ä‘Æ¡n hÃ ng</h3>
+
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-gray-600">Tá»•ng phá»¥ (1 sáº£n pháº©m)</span>
+                        <span class="font-bold text-gray-800"><i
+                                class="fas fa-coins text-yellow-500 mr-1 text-sm"></i>1,500</span>
+                    </div>
+
+                    <div
+                        class="bg-gray-50 p-4 rounded-xl mb-6 border border-gray-200 relative overflow-hidden group hover:border-brand transition">
+                        <div class="flex justify-between items-center relative z-10">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-ticket text-brand text-xl"></i>
+                                <span class="font-bold text-gray-700 text-sm">TapGo Voucher</span>
+                            </div>
+                            <button class="text-brand text-sm font-bold hover:underline">Chá»n mÃ£ <i
+                                    class="fas fa-chevron-right ml-1 text-[10px]"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between mb-8 border-t border-gray-100 pt-4">
+                        <span class="text-gray-900 font-bold text-lg">Tá»•ng cá»™ng</span>
+                        <span class="font-bold text-brand text-3xl"><i
+                                class="fas fa-coins text-yellow-500 mr-1 text-xl"></i>1,500</span>
+                    </div>
+
+                    <a href="checkout_website.html"
+                        class="block text-center w-full bg-brand hover:bg-brand-hover text-white font-bold text-lg py-4 rounded-xl transition hover:-translate-y-0.5">
+                        <i class="fas fa-lock mr-2"></i>THANH TOÃN NGAY
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+<div id="mobile-bottom-nav">
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[428px] bg-white border-t border-gray-100 px-2 py-1.5 flex justify-between items-center z-[100] shadow-[0_-10px_20px_rgba(0,0,0,0.03)] pb-safe rounded-t-2xl">
+    <a href="home_website.html" class="flex flex-col items-center gap-1 flex-1 text-brand">
+        <i class="fas fa-home text-[20px]"></i>
+        <span class="text-[10px] font-bold">Trang chá»§</span>
+    </a>
+    <a href="category_website.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400 hover:text-brand transition">
+        <i class="fas fa-percent text-[20px]"></i>
+        <span class="text-[10px] font-medium">Æ¯u Ä‘Ã£i</span>
+    </a>
+    <a href="booking_website.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400 hover:text-brand relative -top-5 group">
+        <div class="w-[60px] h-[60px] bg-gradient-to-tr from-brand to-brand-hover text-white rounded-full flex items-center justify-center shadow-[0_8px_20px_rgba(244,129,51,0.5)] border-[4px] border-[#FAFAFA] group-hover:scale-105 transition duration-300">
+            <i class="fas fa-qrcode text-[28px]"></i>
+        </div>
+        <span class="text-[10px] font-bold text-gray-800 mt-1">QuÃ©t QR</span>
+    </a>
+    <a href="my_vouchers.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400 hover:text-brand transition">
+        <i class="fas fa-ticket-alt text-[20px]"></i>
+        <span class="text-[10px] font-medium">Voucher</span>
+    </a>
+    <a href="login_website.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400 hover:text-brand transition">
+        <i class="fas fa-user text-[20px]"></i>
+        <span class="text-[10px] font-medium">TÃ i khoáº£n</span>
+    </a>
+</div>
+</div>
+</body>
+
+</html>
