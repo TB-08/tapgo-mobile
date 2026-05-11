@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TAPGO - Danh mục</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="data.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Be Vietnam Pro', 'sans-serif'] },
+                    colors: {
+                        brand: { DEFAULT: '#F48133', hover: '#E06B1F', bg: '#FFF3EB' },
+                        danger: '#EF4444', success: '#10B981'
+                    }
+                },
+                screens: {
+                    'sm': '9999px', 'md': '9999px', 'lg': '9999px', 'xl': '9999px', '2xl': '9999px'
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --mobile-width: 428px;
+        }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: transparent !important;
+            max-width: var(--mobile-width) !important;
+            margin: 0 auto !important;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .pt-safe {
+            padding-top: 47px;
+        }
+
+        .status-bar-mock {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: var(--mobile-width);
+            height: 47px;
+            z-index: 2000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 32px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+            pointer-events: none;
+        }
+
+        .cat-active {
+            background-color: #F48133 !important;
+            color: white !important;
+            border-color: #F48133 !important;
+        }
+
+        /* Hide scrollbar for all elements */
+        *::-webkit-scrollbar {
+            display: none !important;
+        }
+        * {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+        .no-scrollbar {
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* DA NANG SIGNATURE BACKGROUND */
+        .danang-vibe-bg {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: var(--mobile-width);
+            height: 100%;
+            background: linear-gradient(rgba(248, 250, 252, 0.88), rgba(248, 250, 252, 0.88)), url('danang_dragon_bridge_bg_1778333910476.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center bottom;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body x-data="{ 
+    ...getTapgoData(), 
+    activeCat: 'Tất cả',
+    showFilter: false,
+    showAllCats: false,
+    get filteredVouchers() {
+        const all = [...(this.vouchersNH || []), ...(this.vouchersDV || []), ...(this.vouchersSpa || []), ...(this.vouchersKS || [])];
+        if (this.activeCat === 'Tất cả') return all;
+        return all.filter(v => v.category === this.activeCat);
+    }
+} " x-init="activeCat = 'Tất cả'" class="text-gray-900 antialiased font-sans flex flex-col min-h-screen">
+
+    <!-- DA NANG SIGNATURE BACKGROUND LAYER -->
+    <div class="danang-vibe-bg"></div>
+
+    <!-- STATUS BAR MOCKUP -->
+    <div class="status-bar-mock">
+        <div class="flex-1">9:41</div>
+        <div class="flex gap-1.5 items-center">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- MOBILE HEADER -->
+    <header class="bg-white/90 backdrop-blur-xl sticky top-0 z-[100] border-b border-gray-100/50 pt-safe shadow-sm">
+        <div class="px-4 py-4 flex items-center gap-3">
+            <a href="home_website.html" class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full text-gray-600">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            <h1 class="text-lg font-bold flex-1">Ưu đãi nổi bật</h1>
+            <button @click="showFilter = true" class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full text-gray-600 transition-transform active:scale-90">
+                <i class="fas fa-filter"></i>
+            </button>
+        </div>
+        
+        <!-- Standard Reliable Category Scroller -->
+        <div class="pb-4" x-show="!showAllCats">
+            <div class="overflow-x-auto no-scrollbar scroll-smooth px-4" style="-webkit-overflow-scrolling: touch; touch-action: pan-x;">
+                <div class="flex flex-nowrap gap-2 py-1">
+                    <template x-for="c in cats" :key="c.name">
+                        <button 
+                            @click="activeCat = c.name"
+                            :class="activeCat === c.name ? 'border-brand bg-brand text-white shadow-lg shadow-brand/20' : 'border-gray-100 bg-white text-gray-500'"
+                            class="px-5 py-2.5 rounded-full border text-[11px] font-bold whitespace-nowrap transition-all active:scale-95 flex-shrink-0" 
+                            x-text="c.name"></button>
+                    </template>
+                    <!-- Small spacer at the end to ensure padding on both sides works -->
+                    <div class="w-4 flex-shrink-0"></div>
+                </div>
+            </div>
+            
+            <div class="px-4">
+                <button @click="showAllCats = true" class="w-full mt-2 py-2 bg-gray-50 rounded-xl text-[10px] font-bold text-gray-400 flex items-center justify-center gap-2 border border-gray-100/50 active:bg-gray-100 transition-colors">
+                    <i class="fas fa-th-large"></i> XEM TẤT CẢ DANH MỤC
+                </button>
+            </div>
+        </div>
+        
+        <!-- Expanded Grid View -->
+        <div x-show="showAllCats" x-cloak x-transition class="bg-white/90 backdrop-blur-md px-4 pb-6">
+            <div class="flex items-center justify-between py-4 border-b border-gray-50 mb-4">
+                <span class="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Tất cả danh mục</span>
+                <button @click="showAllCats = false" class="w-8 h-8 bg-gray-50 rounded-full flex items-center justify-center text-gray-400">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <template x-for="c in cats" :key="c.name">
+                    <button 
+                        @click="activeCat = c.name; showAllCats = false"
+                        :class="activeCat === c.name ? 'border-brand bg-brand text-white' : 'border-gray-100 bg-white text-gray-500'"
+                        class="p-4 rounded-3xl border text-[10px] font-bold text-center transition-all flex flex-col items-center gap-2" 
+                        >
+                        <i :class="'fa-solid fa-' + c.i" class="text-xl opacity-80"></i>
+                        <span x-text="c.name" class="line-clamp-1"></span>
+                    </button>
+                </template>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full p-4 space-y-6">
+        
+        <!-- 2-Column Product Grid -->
+        <div class="grid grid-cols-2 gap-4 pb-10">
+            <template x-for="v in filteredVouchers" :key="v.title">
+                <a href="product_detail.html" class="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm flex flex-col active:scale-95 transition-transform">
+                    <div class="aspect-square relative overflow-hidden">
+                        <img :src="v.img" class="w-full h-full object-cover">
+                        <div class="absolute top-2 left-2 bg-black/50 backdrop-blur-md text-white text-[9px] font-bold px-2 py-1 rounded-lg">
+                            <i class="fas fa-star text-yellow-400 mr-1"></i> 4.8
+                        </div>
+                        <button class="absolute top-2 right-2 w-8 h-8 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center text-gray-400">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-3 space-y-2 flex-1 flex flex-col justify-between">
+                        <div>
+                            <p class="text-[9px] font-bold text-brand uppercase tracking-wider" x-text="v.brand"></p>
+                            <h4 class="text-[12px] font-bold text-gray-800 line-clamp-2 leading-tight" x-text="v.title"></h4>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[15px] font-bold text-brand" x-text="v.salePrice"></span>
+                                <span class="text-[9px] text-gray-400 line-through" x-text="v.originalPrice"></span>
+                            </div>
+                            <div class="flex items-center gap-1">
+                                <i class="fas fa-map-marker-alt text-[8px] text-gray-300"></i>
+                                <span class="text-[9px] text-gray-500">Cách đây 1.2km</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </template>
+        </div>
+
+    </main>
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[428px] bg-white/90 backdrop-blur-xl border-t border-gray-100 px-2 py-2 flex justify-between items-center z-[1000] shadow-[0_-5px_20px_rgba(0,0,0,0.05)] pb-safe rounded-t-[2rem]">
+        <a href="home_website.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400">
+            <i class="fas fa-home text-[22px]"></i>
+            <span class="text-[10px] font-medium">Trang chủ</span>
+        </a>
+        <a href="category_website.html" class="flex flex-col items-center gap-1 flex-1 text-brand">
+            <i class="fas fa-th-large text-[22px]"></i>
+            <span class="text-[10px] font-bold">Ưu đãi</span>
+        </a>
+        <a href="home_website.html?openQr" class="flex flex-col items-center gap-1 flex-1 relative -top-6">
+            <div class="w-15 h-15 p-1 bg-white rounded-full">
+                <div class="w-14 h-14 bg-gradient-to-tr from-brand to-[#FF9D5C] text-white rounded-full flex items-center justify-center shadow-lg nav-center-glow border-4 border-white transition-transform active:scale-90">
+                    <i class="fas fa-qrcode text-2xl"></i>
+                </div>
+            </div>
+            <span class="text-[10px] font-bold text-gray-800 -mt-1">Quét QR</span>
+        </a>
+        <a href="my_vouchers.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400">
+            <i class="fas fa-ticket-alt text-[22px]"></i>
+            <span class="text-[10px] font-medium">Voucher</span>
+        </a>
+        <a href="login_website.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400">
+            <i class="fas fa-user text-[22px]"></i>
+            <span class="text-[10px] font-medium">Cá nhân</span>
+        </a>
+    </nav>
+
+    <!-- FILTER BOTTOM SHEET MODAL -->
+    <div x-show="showFilter" 
+         x-cloak
+         class="fixed inset-0 z-[2000] flex items-end justify-center pointer-events-none">
+        
+        <!-- Backdrop -->
+        <div x-show="showFilter"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             @click="showFilter = false"
+             class="absolute inset-0 bg-black/40 backdrop-blur-sm pointer-events-auto"></div>
+
+        <!-- Sheet Content -->
+        <div x-show="showFilter"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="translate-y-full"
+             x-transition:enter-end="translate-y-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="translate-y-0"
+             x-transition:leave-end="translate-y-full"
+             class="relative w-full max-w-[428px] bg-white rounded-t-[2.5rem] shadow-2xl pointer-events-auto p-6 space-y-8 pb-10">
+            
+            <!-- Handle -->
+            <div class="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-gray-200 rounded-full"></div>
+
+            <div class="flex items-center justify-between pt-2">
+                <h2 class="text-xl font-bold">Bộ lọc tìm kiếm</h2>
+                <button @click="showFilter = false" class="text-gray-400 font-bold text-sm">Xóa tất cả</button>
+            </div>
+
+            <!-- Categories in Filter -->
+            <div class="space-y-4">
+                <h3 class="text-sm font-bold text-gray-400 uppercase tracking-widest">Danh mục</h3>
+                <div class="grid grid-cols-3 gap-2">
+                    <template x-for="c in cats.slice(0, 9)" :key="c.name">
+                        <button 
+                            @click="activeCat = c.name; showFilter = false"
+                            :class="activeCat === c.name ? 'border-brand bg-brand-bg text-brand' : 'border-gray-100 bg-gray-50 text-gray-500'"
+                            class="p-3 rounded-2xl border-2 text-[10px] font-bold text-center flex flex-col items-center gap-1">
+                            <i :class="'fa-solid fa-' + c.i" class="text-base"></i>
+                            <span x-text="c.name" class="line-clamp-1"></span>
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Sort By -->
+            <div class="space-y-4">
+                <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Sắp xếp theo</h3>
+                <div class="flex flex-wrap gap-3">
+                    <button class="px-5 py-2.5 rounded-2xl border-2 border-brand bg-brand-bg text-brand text-[13px] font-bold">Gần tôi nhất</button>
+                    <button class="px-5 py-2.5 rounded-2xl border-2 border-gray-100 bg-gray-50 text-gray-500 text-[13px] font-bold">Giá thấp nhất</button>
+                    <button class="px-5 py-2.5 rounded-2xl border-2 border-gray-100 bg-gray-50 text-gray-500 text-[13px] font-bold">Phổ biến nhất</button>
+                </div>
+            </div>
+
+            <!-- Location -->
+            <div class="space-y-4">
+                <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Khu vực</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="flex items-center justify-between p-4 rounded-2xl border-2 border-brand bg-brand-bg text-brand">
+                        <span class="text-[13px] font-bold">Đà Nẵng</span>
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="flex items-center justify-between p-4 rounded-2xl border-2 border-gray-100 bg-gray-50 text-gray-500">
+                        <span class="text-[13px] font-bold">Toàn quốc</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Price Range -->
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Khoảng giá</h3>
+                    <span class="text-brand font-bold text-sm">0đ - 2.000.000đ+</span>
+                </div>
+                <div class="relative h-2 bg-gray-100 rounded-full mt-6">
+                    <div class="absolute left-0 right-0 h-full bg-brand/30 rounded-full"></div>
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-6 h-6 bg-white border-2 border-brand rounded-full shadow-lg"></div>
+                    <div class="absolute right-0 top-1/2 -translate-y-1/2 w-6 h-6 bg-white border-2 border-brand rounded-full shadow-lg"></div>
+                </div>
+            </div>
+
+            <!-- Action Button -->
+            <button @click="showFilter = false" class="w-full py-4 bg-brand text-white font-bold rounded-2xl shadow-xl shadow-brand/20 active:scale-[0.98] transition-transform">
+                Áp dụng bộ lọc
+            </button>
+        </div>
+    </div>
+
+</body>
+
+</html>
