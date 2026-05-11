@@ -115,6 +115,7 @@
     showDealDetail: false,
     showStoreInfo: false,
     showSecurity: false,
+    openFlashsale: false,
     dealFilter: 'all',
     merchantInfo: {
         name: 'Yakimono Grill',
@@ -148,6 +149,9 @@
                 <button @click="showNotif = !showNotif" class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full text-gray-600 relative hover:bg-gray-100 transition active:scale-90">
                     <i class="fa-regular fa-bell text-lg"></i>
                     <span x-show="notifications.filter(n => !n.read).length" class="absolute top-2.5 right-2.5 w-2 h-2 bg-danger rounded-full border border-white"></span>
+                </button>
+                <button @click="currentTab = 'account'" class="w-10 h-10 flex items-center justify-center rounded-full overflow-hidden border-2 transition active:scale-90 shadow-sm" :class="currentTab === 'account' ? 'border-brand' : 'border-white'">
+                    <img src="https://i.pravatar.cc/100?img=12" class="w-full h-full object-cover" alt="User Avatar">
                 </button>
             </div>
         </div>
@@ -218,6 +222,25 @@
                             <p class="text-[9px] font-bold text-brand bg-brand/10 px-1.5 py-0.5 rounded">▲ +28.5%</p>
                             <button @click="showWithdraw = true" class="text-[9px] font-black text-white/60 hover:text-white transition uppercase tracking-widest">Rút tiền</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Flashsale Management (Added as per request) -->
+            <div class="bg-gradient-to-br from-orange-400 to-red-500 p-6 rounded-[3rem] shadow-xl shadow-brand/20 relative overflow-hidden group active:scale-[0.98] transition-transform" @click="currentTab = 'flashsale_vendor'">
+                <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 blur-3xl rounded-full"></div>
+                <div class="relative z-10 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-white text-2xl border border-white/30 shadow-lg">
+                            <i class="fas fa-bolt animate-pulse"></i>
+                        </div>
+                        <div class="space-y-0.5">
+                            <h3 class="text-white font-black text-lg tracking-tight leading-none">Quản lý Flashsale</h3>
+                            <p class="text-white/70 text-[10px] font-bold uppercase tracking-widest italic">Tăng trưởng doanh thu 40%</p>
+                        </div>
+                    </div>
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-chevron-right text-sm"></i>
                     </div>
                 </div>
             </div>
@@ -603,6 +626,30 @@
                         </div>
                         <i class="fas fa-chevron-right text-xs text-gray-200"></i>
                     </button>
+
+                    <!-- Flashsale Management (Added as per request) -->
+                    <div class="space-y-1">
+                        <button @click="openFlashsale = !openFlashsale" class="w-full flex items-center justify-between p-5 bg-orange-50/50 hover:bg-orange-50 transition rounded-3xl border border-orange-100/50">
+                            <div class="flex items-center gap-5">
+                                <div class="w-12 h-12 bg-brand text-white rounded-2xl flex items-center justify-center text-lg shadow-lg shadow-brand/20"><i class="fas fa-bolt"></i></div>
+                                <div class="text-left">
+                                    <p class="text-sm font-black text-brand">Quản lý Flashsale</p>
+                                    <p class="text-[10px] text-brand/60 font-medium">Flashsale Vendor & Hệ thống</p>
+                                </div>
+                            </div>
+                            <i class="fas fa-chevron-down text-xs text-brand transition-transform duration-300" :class="openFlashsale ? 'rotate-180' : ''"></i>
+                        </button>
+                        <div x-show="openFlashsale" x-cloak x-transition class="px-2 space-y-1 pb-2">
+                            <button @click="currentTab = 'flashsale_vendor'" class="w-full flex items-center gap-4 p-4 hover:bg-orange-50 rounded-2xl transition">
+                                <div class="w-10 h-10 bg-white text-gray-400 rounded-xl flex items-center justify-center text-md border border-gray-100 shadow-sm"><i class="fas fa-store"></i></div>
+                                <span class="text-xs font-black text-gray-700">Flashsale Vendor</span>
+                            </button>
+                            <button @click="currentTab = 'flashsale_system'" class="w-full flex items-center gap-4 p-4 hover:bg-orange-50 rounded-2xl transition">
+                                <div class="w-10 h-10 bg-white text-orange-400 rounded-xl flex items-center justify-center text-md border border-gray-100 shadow-sm"><i class="fas fa-globe"></i></div>
+                                <span class="text-xs font-black text-brand">Flashsale Hệ thống</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Business Insights Card -->
@@ -619,6 +666,125 @@
             <button @click="window.location.href='login_vendor.html'" class="w-full flex items-center justify-center gap-3 p-5 bg-red-50 text-red-500 rounded-3xl font-black text-xs uppercase tracking-widest active:scale-95 transition-all mt-4 mb-8">
                 <i class="fas fa-sign-out-alt"></i> Đăng xuất hệ thống
             </button>
+        </div>
+
+        <!-- TAB 6: FLASHSALE VENDOR (MOBILE) -->
+        <div x-show="currentTab === 'flashsale_vendor'" x-transition class="p-4 space-y-6">
+            <!-- Segmented Control -->
+            <div class="bg-gray-100 p-1 rounded-2xl flex">
+                <button @click="currentTab = 'flashsale_vendor'" class="flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all bg-white shadow-sm text-brand">Flashsale Vendor</button>
+                <button @click="currentTab = 'flashsale_system'" class="flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all text-gray-400">Flashsale Hệ thống</button>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-black tracking-tight">Flashsale Vendor</h2>
+                    <p class="text-[11px] text-gray-400 font-medium leading-none">Chương trình riêng của tiệm.</p>
+                </div>
+                <button class="bg-brand text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-brand/20">Tạo mới</button>
+            </div>
+
+            <!-- Stats Card -->
+            <div class="bg-gray-900 p-6 rounded-[2.5rem] border border-gray-800 shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -top-10 w-40 h-40 bg-brand/10 blur-3xl rounded-full"></div>
+                <div class="relative z-10 flex justify-between items-center">
+                    <div class="space-y-1">
+                        <p class="text-[10px] font-bold text-white/40 uppercase tracking-widest">Doanh thu dự kiến</p>
+                        <h3 class="text-2xl font-black text-white">45.5k <span class="text-sm text-brand">TC</span></h3>
+                        <p class="text-[9px] font-bold text-success">▲ +40% (TapGO AI dự báo)</p>
+                    </div>
+                    <div class="w-14 h-14 bg-white/5 text-brand rounded-2xl flex items-center justify-center text-2xl border border-white/10 shadow-inner"><i class="fas fa-bolt"></i></div>
+                </div>
+            </div>
+
+            <!-- List of Flashsales -->
+            <div class="space-y-4">
+                <template x-for="item in [
+                    {title: 'Happy Hour - Giảm 50%', time: '17:00 - 19:00', used: 82, total: 100, status: 'Đang diễn ra', price: '199k', oldPrice: '450k', img: 'https://images.unsplash.com/photo-1544148103-0773bf10d330?q=80&w=200'},
+                    {title: 'Tiệc Nướng Đêm Khuya', time: '21:00 - 23:00', used: 0, total: 50, status: 'Sắp diễn ra', price: '299k', oldPrice: '550k', img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=200'}
+                ]">
+                    <div class="bg-white p-4 rounded-[2.5rem] border border-gray-100 shadow-sm space-y-4">
+                        <div class="flex gap-4">
+                            <img :src="item.img" class="w-20 h-20 rounded-2xl object-cover shrink-0 border border-gray-50 shadow-inner">
+                            <div class="flex-1 space-y-1.5">
+                                <div class="flex justify-between items-start">
+                                    <h4 class="text-sm font-black text-gray-900 leading-tight" x-text="item.title"></h4>
+                                    <span :class="item.status === 'Đang diễn ra' ? 'bg-red-50 text-red-500 border-red-100' : 'bg-gray-50 text-gray-400 border-gray-100'" class="text-[8px] font-black px-2 py-0.5 rounded border uppercase tracking-wider" x-text="item.status"></span>
+                                </div>
+                                <p class="text-[10px] text-gray-500 font-bold"><i class="far fa-clock text-brand mr-1"></i> <span x-text="item.time"></span></p>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-black text-red-500" x-text="item.price"></span>
+                                    <span class="text-[10px] text-gray-300 line-through font-bold" x-text="item.oldPrice"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-end">
+                                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Đã bán: <span class="text-gray-900" x-text="item.used + '/' + item.total"></span></p>
+                                <span class="text-[10px] font-black text-brand" x-text="Math.round(item.used/item.total*100) + '%'"></span>
+                            </div>
+                            <div class="w-full h-2 bg-gray-50 rounded-full overflow-hidden shadow-inner">
+                                <div class="h-full bg-gradient-to-r from-brand to-red-500 rounded-full" :style="'width: ' + (item.used/item.total*100) + '%'"></div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- TAB 7: FLASHSALE HỆ THỐNG (MOBILE) -->
+        <div x-show="currentTab === 'flashsale_system'" x-transition class="p-4 space-y-6">
+            <!-- Segmented Control -->
+            <div class="bg-gray-100 p-1 rounded-2xl flex">
+                <button @click="currentTab = 'flashsale_vendor'" class="flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all text-gray-400">Flashsale Vendor</button>
+                <button @click="currentTab = 'flashsale_system'" class="flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all bg-white shadow-sm text-brand">Flashsale Hệ thống</button>
+            </div>
+
+            <div class="space-y-1">
+                <h2 class="text-xl font-black tracking-tight">Flashsale Hệ thống</h2>
+                <p class="text-[11px] text-gray-400 font-medium leading-none">Tham gia chiến dịch TapGO.</p>
+            </div>
+
+            <!-- Featured Campaign Card -->
+            <div class="relative rounded-[2.5rem] overflow-hidden min-h-[220px] flex items-center p-6 shadow-2xl bg-gray-950">
+                <div class="absolute inset-0 z-0">
+                    <img src="https://images.unsplash.com/photo-1534422298391-e4f8c170db06?q=80&w=600" class="w-full h-full object-cover opacity-30">
+                    <div class="absolute inset-0 bg-gradient-to-r from-gray-950 via-gray-950/70 to-transparent"></div>
+                </div>
+                <div class="relative z-10 space-y-4">
+                    <span class="inline-block px-3 py-1 bg-brand text-white text-[8px] font-black rounded-full uppercase tracking-[0.2em] animate-pulse">Mega Event 2026</span>
+                    <h3 class="text-2xl font-black text-white leading-tight">Mùa Hè Rực Rỡ <br><span class="text-brand">TapGO Đà Nẵng</span></h3>
+                    <p class="text-[10px] text-gray-300 leading-relaxed max-w-[200px]">Tiếp cận hơn 500,000 khách du lịch tại Đà Nẵng.</p>
+                    <button class="px-6 py-2.5 bg-brand text-white rounded-xl font-black text-[10px] shadow-lg shadow-brand/40 uppercase tracking-widest">Tham gia ngay</button>
+                </div>
+            </div>
+
+            <!-- Campaign Grid -->
+            <div class="grid grid-cols-1 gap-4">
+                <div class="bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm space-y-4 group">
+                    <div class="flex justify-between items-start">
+                        <div class="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center text-red-500 text-xl border border-red-100"><i class="fas fa-fire-alt"></i></div>
+                        <span class="text-[8px] font-black px-2 py-1 bg-gray-50 text-gray-400 rounded uppercase tracking-widest">Ẩm thực</span>
+                    </div>
+                    <div class="space-y-1">
+                        <h4 class="text-lg font-black text-gray-900 group-hover:text-brand transition">Bữa Trưa 1K</h4>
+                        <p class="text-[11px] text-gray-500 font-medium">Tăng trưởng khách hàng mới bằng deal 1K tài trợ.</p>
+                    </div>
+                    <button class="w-full py-3 bg-gray-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition">Đăng ký ngay</button>
+                </div>
+
+                <div class="bg-white p-6 rounded-[2.5rem] border-2 border-brand/20 shadow-sm space-y-4 group">
+                    <div class="flex justify-between items-start">
+                        <div class="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-500 text-xl border border-purple-100"><i class="fas fa-bolt"></i></div>
+                        <span class="text-[8px] font-black px-2 py-1 bg-brand text-white rounded uppercase tracking-widest">Hot</span>
+                    </div>
+                    <div class="space-y-1">
+                        <h4 class="text-lg font-black text-gray-900">Happy Weekend 50%</h4>
+                        <p class="text-[11px] text-gray-500 font-medium">Ngày hội mua sắm cuối tuần. Tag VIP Partner.</p>
+                    </div>
+                    <button class="w-full py-3 bg-brand text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-brand/20 active:scale-95 transition">Đã tham gia ✓</button>
+                </div>
+            </div>
         </div>
 
     </main>
@@ -648,9 +814,9 @@
             <i class="fas fa-tags text-[20px]"></i>
             <span class="text-[10px] font-black uppercase tracking-tighter">Deals</span>
         </button>
-        <button @click="currentTab = 'account'" :class="currentTab === 'account' ? 'nav-active' : 'text-gray-400'" class="flex flex-col items-center gap-1.5 flex-1 transition-all">
-            <i class="fas fa-user-cog text-[20px]"></i>
-            <span class="text-[10px] font-black uppercase tracking-tighter">Thiết lập</span>
+        <button @click="currentTab = 'flashsale_vendor'" :class="currentTab === 'flashsale_vendor' || currentTab === 'flashsale_system' ? 'nav-active' : 'text-gray-400'" class="flex flex-col items-center gap-1.5 flex-1 transition-all">
+            <i class="fas fa-bolt text-[20px]"></i>
+            <span class="text-[10px] font-black uppercase tracking-tighter">Flashsale</span>
         </button>
     </nav>
 
