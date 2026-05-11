@@ -323,7 +323,33 @@
             </div>
         </div>
 
+        <!-- FREE VOUCHERS (MOBILE) -->
+        <div class="px-4 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-black text-emerald-900">Voucher Miễn Phí 🎁</h3>
+                <a href="category_website.html" class="text-emerald-600 text-[11px] font-bold">Xem tất cả</a>
+            </div>
+            <div class="flex gap-3 overflow-x-auto hide-scrollbar -mx-4 px-4 pb-2">
+                <template x-for="v in vouchersFree" :key="v.title">
+                    <a href="product_detail.html" class="min-w-[160px] bg-white rounded-[2rem] p-3 border border-emerald-50 shadow-sm active:scale-95 transition-transform block">
+                        <div class="relative aspect-square rounded-[1.5rem] overflow-hidden mb-3">
+                            <img :src="v.img" class="w-full h-full object-cover">
+                            <div class="absolute top-2 right-2 bg-emerald-500 text-white text-[8px] font-black px-2 py-0.5 rounded-lg shadow-sm uppercase">Free</div>
+                        </div>
+                        <h4 class="text-[12px] font-bold text-gray-800 line-clamp-2 leading-tight h-[2.5em]" x-text="v.title"></h4>
+                        <div class="flex items-center justify-between mt-2">
+                            <span class="text-emerald-600 font-black text-[13px]">Miễn phí</span>
+                            <div class="w-7 h-7 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center">
+                                <i class="fas fa-plus text-[10px]"></i>
+                            </div>
+                        </div>
+                    </a>
+                </template>
+            </div>
+        </div>
+
         <!-- BRAND MARQUEE (PARTNERS) -->
+
         <div class="space-y-4">
             <h3 class="px-4 text-[13px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
                 <i class="fas fa-handshake text-brand"></i> Đối tác chiến lược
