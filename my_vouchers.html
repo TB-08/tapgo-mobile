@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TAPGO - Voucher của tôi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="data.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Be Vietnam Pro', 'sans-serif'] },
+                    colors: {
+                        brand: { DEFAULT: '#F48133', hover: '#E06B1F', bg: '#FFF3EB' },
+                        danger: '#EF4444', success: '#10B981',
+                        tier: { silver: '#9CA3AF', gold: '#FBBF24', platinum: '#1F2937' }
+                    }
+                },
+                screens: {
+                    'sm': '9999px', 'md': '9999px', 'lg': '9999px', 'xl': '9999px', '2xl': '9999px'
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --mobile-width: 428px;
+        }
+
+        body {
+            background-color: transparent !important;
+            font-family: 'Be Vietnam Pro', sans-serif !important;
+            max-width: var(--mobile-width) !important;
+            margin: 0 auto !important;
+            min-height: 100dvh !important;
+            box-shadow: 0 0 100px rgba(0,0,0,0.1) !important;
+            position: relative !important;
+            overflow-x: hidden !important;
+            padding-bottom: 90px !important;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .pt-safe {
+            padding-top: 47px;
+        }
+
+        .status-bar-mock {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: var(--mobile-width);
+            height: 47px;
+            z-index: 2000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 32px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+            pointer-events: none;
+        }
+
+        .tab-active {
+            color: #F48133 !important;
+            border-bottom: 3px solid #F48133 !important;
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Hide scrollbar for IE, Edge and Firefox */
+        * {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        /* DA NANG SIGNATURE BACKGROUND */
+        .danang-vibe-bg {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: var(--mobile-width);
+            height: 100%;
+            background: linear-gradient(rgba(250, 250, 250, 0.88), rgba(250, 250, 250, 0.88)), url('danang_dragon_bridge_bg_1778333910476.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center bottom;
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body x-data="{ 
+    tabVoucher: 'chuadung', 
+    openVoucherQr: false, 
+    selectedVoucher: {} 
+}" class="text-gray-900 antialiased font-sans flex flex-col min-h-screen">
+
+    <!-- DA NANG SIGNATURE BACKGROUND LAYER -->
+    <div class="danang-vibe-bg"></div>
+
+    <!-- STATUS BAR MOCKUP -->
+    <div class="status-bar-mock">
+        <div class="flex-1">9:41</div>
+        <div class="flex gap-1.5 items-center">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <!-- MOBILE HEADER -->
+    <header class="bg-white/90 backdrop-blur-xl sticky top-0 z-[100] border-b border-gray-100/50 pt-safe shadow-sm">
+        <div class="px-4 py-4 flex items-center gap-3">
+            <a href="home_website.html" class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full text-gray-600">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            <h1 class="text-lg font-bold flex-1">Voucher của tôi</h1>
+            <button class="w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full text-gray-600">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="w-full space-y-6">
+        
+        <!-- User Summary -->
+        <div class="px-4 py-6 bg-white border-b border-gray-100 flex items-center gap-4">
+            <div class="w-16 h-16 bg-brand-bg border-2 border-brand rounded-full flex items-center justify-center text-brand font-bold text-xl">
+                AD
+            </div>
+            <div class="space-y-1">
+                <h2 class="text-lg font-bold">Admin TAPGO</h2>
+                <div class="flex items-center gap-2">
+                    <span class="bg-tier-gold/10 text-tier-gold text-[10px] font-bold px-2 py-0.5 rounded-full border border-tier-gold/20 flex items-center gap-1">
+                        <i class="fas fa-crown"></i> Hạng Vàng
+                    </span>
+                    <span class="text-[12px] text-gray-400">1,250 TapCoin</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="px-4">
+            <div class="flex border-b border-gray-100 mb-6">
+                <button @click="tabVoucher = 'chuadung'" :class="tabVoucher === 'chuadung' ? 'tab-active' : 'text-gray-400'" class="flex-1 py-4 text-[13px] font-bold transition-all">Chưa dùng (3)</button>
+                <button @click="tabVoucher = 'dadung'" :class="tabVoucher === 'dadung' ? 'tab-active' : 'text-gray-400'" class="flex-1 py-4 text-[13px] font-bold transition-all">Đã dùng (2)</button>
+                <button @click="tabVoucher = 'hethan'" :class="tabVoucher === 'hethan' ? 'tab-active' : 'text-gray-400'" class="flex-1 py-4 text-[13px] font-bold transition-all">Hết hạn (1)</button>
+            </div>
+
+            <!-- Voucher List -->
+            <div class="space-y-4 pb-20">
+                
+                <!-- CHƯA DÙNG -->
+                <div x-show="tabVoucher === 'chuadung'" class="space-y-4" x-transition>
+                    <template x-for="v in [
+                        {img: 'https://images.unsplash.com/photo-1544148103-0773bf10d330?q=80&w=400', title: 'Yakimono - Thịt Nướng Nhật Bản', expiry: '30/12/2025', brand: 'Yakimono', code: 'YAK-9982'},
+                        {img: 'https://images.unsplash.com/photo-1560624052-449f5ddf0c31?q=80&w=400', title: 'GrandView Hotel - 2N1Đ Phòng Đôi', expiry: '15/01/2026', brand: 'GrandView', code: 'GVH-0012'},
+                        {img: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=400', title: 'The Coffee House E-Gift 1 Triệu', expiry: '28/02/2026', brand: 'The Coffee House', code: 'TCH-5541'}
+                    ]">
+                        <div class="bg-white rounded-3xl border border-gray-100 overflow-hidden flex shadow-sm active:scale-[0.98] transition-transform">
+                            <div class="w-28 h-28 flex-shrink-0 relative">
+                                <img :src="v.img" class="w-full h-full object-cover">
+                                <div class="absolute inset-y-0 right-0 w-[1px] border-r border-dashed border-gray-200"></div>
+                            </div>
+                            <div class="flex-1 p-3 flex flex-col justify-between">
+                                <div>
+                                    <h4 class="text-[13px] font-bold text-gray-900 line-clamp-2 leading-snug" x-text="v.title"></h4>
+                                    <p class="text-[10px] text-gray-400 mt-1">Hết hạn: <span class="text-danger font-medium" x-text="v.expiry"></span></p>
+                                </div>
+                                <div class="flex items-center justify-between mt-2">
+                                    <span class="text-[10px] font-bold text-brand uppercase tracking-wider" x-text="v.brand"></span>
+                                    <button @click="selectedVoucher = v; openVoucherQr = true" class="bg-brand text-white text-[11px] font-bold px-3 py-1.5 rounded-lg shadow-lg shadow-brand/20 active:scale-95 transition-transform">Dùng ngay</button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- ĐÃ DÙNG -->
+                <div x-show="tabVoucher === 'dadung'" class="space-y-4" style="display:none" x-transition>
+                    <template x-for="v in [
+                        {img: 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?q=80&w=400', title: 'Vé xem phim CGV 2D Toàn Quốc', usedDate: '12/04/2026', brand: 'CGV CINEMAS'},
+                        {img: 'https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=400', title: 'Manwah - Voucher 500k Buffet', usedDate: '10/04/2026', brand: 'MANWAH'}
+                    ]">
+                        <div class="bg-gray-50 rounded-3xl border border-gray-100 overflow-hidden flex opacity-60">
+                            <div class="w-28 h-28 flex-shrink-0 relative">
+                                <img :src="v.img" class="w-full h-full object-cover grayscale">
+                                <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-white text-2xl"></i>
+                                </div>
+                            </div>
+                            <div class="flex-1 p-3 flex flex-col justify-between">
+                                <div>
+                                    <h4 class="text-[13px] font-bold text-gray-900 line-through" x-text="v.title"></h4>
+                                    <p class="text-[10px] text-gray-500 mt-1">Đã dùng ngày: <span x-text="v.usedDate"></span></p>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[9px] font-bold text-gray-400" x-text="v.brand"></span>
+                                    <button class="w-max text-[11px] font-bold text-brand border border-brand/20 px-3 py-1.5 rounded-lg">Đánh giá</button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- HẾT HẠN -->
+                <div x-show="tabVoucher === 'hethan'" class="space-y-4" style="display:none" x-transition>
+                    <div class="bg-gray-50 rounded-3xl border border-gray-100 overflow-hidden flex opacity-40 grayscale">
+                        <div class="w-28 h-28 flex-shrink-0 relative">
+                            <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=400" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                <span class="bg-white/20 backdrop-blur-md text-white text-[10px] font-black px-2 py-1 rounded-lg uppercase tracking-widest border border-white/30">Hết hạn</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 p-3 flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-[13px] font-bold text-gray-400 line-through">Pizza Hut - Combo 2 Người 299k</h4>
+                                <p class="text-[10px] text-danger/50 mt-1">Hết hạn ngày: 01/01/2024</p>
+                            </div>
+                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">PIZZA HUT</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- VOUCHER REDEEM MODAL (QR CODE) -->
+    <div x-show="openVoucherQr" 
+         x-cloak
+         class="fixed inset-0 z-[2000] flex items-center justify-center p-6"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 scale-95"
+         x-transition:enter-end="opacity-100 scale-100">
+        
+        <div @click="openVoucherQr = false" class="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
+        
+        <div class="relative w-full max-w-sm bg-white rounded-[3rem] overflow-hidden shadow-2xl p-8 space-y-6 text-center">
+            <!-- Header -->
+            <div class="space-y-2">
+                <p class="text-[10px] text-brand font-black uppercase tracking-[0.2em]" x-text="selectedVoucher.brand"></p>
+                <h3 class="text-xl font-black text-gray-900 leading-tight" x-text="selectedVoucher.title"></h3>
+            </div>
+
+            <!-- QR Area -->
+            <div class="relative aspect-square bg-gray-50 rounded-[2.5rem] flex flex-col items-center justify-center p-6 border-2 border-dashed border-brand/20">
+                <img :src="'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + selectedVoucher.code + '&color=F48133'" 
+                     class="w-full h-full object-contain">
+                
+                <!-- Laser Animation -->
+                <div class="absolute top-0 left-0 w-full h-1 bg-brand shadow-[0_0_15px_#F48133] animate-[scan_3s_infinite_linear]"></div>
+                
+                <p class="mt-4 font-mono font-black text-lg tracking-widest text-gray-900" x-text="selectedVoucher.code"></p>
+            </div>
+
+            <p class="text-[11px] text-gray-400 font-medium px-4">Đưa mã này cho nhân viên tại quầy để được áp dụng ưu đãi trực tiếp.</p>
+
+            <button @click="openVoucherQr = false" class="w-full py-4 bg-gray-900 text-white font-black rounded-2xl active:scale-95 transition-transform text-sm uppercase tracking-widest">
+                Đóng
+            </button>
+        </div>
+    </div>
+
+    <style>
+        @keyframes scan {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+    </style>
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[428px] bg-white/90 backdrop-blur-xl border-t border-gray-100 px-2 py-2 flex justify-between items-center z-[1000] shadow-[0_-5px_20px_rgba(0,0,0,0.05)] pb-safe rounded-t-[2rem]">
+        <a href="home_website.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400">
+            <i class="fas fa-home text-[22px]"></i>
+            <span class="text-[10px] font-medium">Trang chủ</span>
+        </a>
+        <a href="category_website.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400">
+            <i class="fas fa-th-large text-[22px]"></i>
+            <span class="text-[10px] font-medium">Ưu đãi</span>
+        </a>
+        <a href="home_website.html?openQr" class="flex flex-col items-center gap-1 flex-1 relative -top-6">
+            <div class="w-15 h-15 p-1 bg-white rounded-full">
+                <div class="w-14 h-14 bg-gradient-to-tr from-brand to-[#FF9D5C] text-white rounded-full flex items-center justify-center shadow-lg nav-center-glow border-4 border-white transition-transform active:scale-90">
+                    <i class="fas fa-qrcode text-2xl"></i>
+                </div>
+            </div>
+            <span class="text-[10px] font-bold text-gray-800 -mt-1">Quét QR</span>
+        </a>
+        <a href="my_vouchers.html" class="flex flex-col items-center gap-1 flex-1 nav-active text-brand">
+            <i class="fas fa-ticket-alt text-[22px]"></i>
+            <span class="text-[10px] font-bold">Voucher</span>
+        </a>
+        <a href="login_website.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400">
+            <i class="fas fa-user text-[22px]"></i>
+            <span class="text-[10px] font-medium">Cá nhân</span>
+        </a>
+    </nav>
+
+</body>
+
+</html>
