@@ -241,6 +241,28 @@
     </header>
 
     <main class="w-full space-y-8 flex-1">
+        <!-- USER TIER QUICK CARD (MOBILE) -->
+        <div class="px-4 mt-4" x-show="isLoggedIn">
+            <a href="membership_website.html" class="flex items-center gap-4 bg-brand p-4 rounded-[2rem] shadow-xl shadow-brand/20 active:scale-[0.98] transition-transform relative overflow-hidden group">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 blur-2xl rounded-full"></div>
+                <div class="w-12 h-12 bg-yellow-400 rounded-2xl flex items-center justify-center text-white shadow-lg group-hover:rotate-12 transition duration-500">
+                    <i class="fas fa-crown text-xl"></i>
+                </div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[10px] font-black text-white/80 uppercase tracking-widest" x-text="'Hạng ' + tiers.find(t => t.id === user.tier).name"></span>
+                        <span class="text-[10px] font-bold text-white/60 uppercase">Tích thêm 750đ để thăng hạng</span>
+                    </div>
+                    <div class="flex items-baseline gap-1.5">
+                        <span class="text-2xl font-black text-white" x-text="user.points.toLocaleString()"></span>
+                        <span class="text-xs font-bold text-white/80">Điểm</span>
+                    </div>
+                </div>
+                <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-white">
+                    <i class="fas fa-chevron-right text-xs"></i>
+                </div>
+            </a>
+        </div>
         
         <!-- Hero Banner Section -->
         <div class="px-4 mt-4">
@@ -418,7 +440,7 @@
             <i class="fas fa-ticket-alt text-[22px]"></i>
             <span class="text-[10px] font-medium">Voucher</span>
         </a>
-        <a href="login_website.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400">
+        <a href="membership_website.html" class="flex flex-col items-center gap-1 flex-1 text-gray-400">
             <i class="fas fa-user text-[22px]"></i>
             <span class="text-[10px] font-medium">Cá nhân</span>
         </a>
