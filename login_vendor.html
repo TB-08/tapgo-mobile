@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Đăng Nhập Đối Tác | TapGO Business Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="data.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Be Vietnam Pro', 'sans-serif'] },
+                    colors: {
+                        brand: { DEFAULT: '#F48133', hover: '#E06B1F', bg: '#FFF3EB' },
+                        danger: '#EF4444', success: '#10B981'
+                    }
+                },
+                screens: {
+                    'sm': '9999px', 'md': '9999px', 'lg': '9999px', 'xl': '9999px', '2xl': '9999px'
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --mobile-width: 428px;
+        }
+
+        body {
+            background-color: #000 !important;
+            font-family: 'Be Vietnam Pro', sans-serif !important;
+            max-width: var(--mobile-width) !important;
+            margin: 0 auto !important;
+            min-height: 100dvh !important;
+            box-shadow: 0 0 100px rgba(0,0,0,1) !important;
+            position: relative !important;
+            overflow-x: hidden !important;
+            color: white;
+        }
+
+        .pt-safe {
+            padding-top: 47px;
+        }
+
+        .status-bar-mock {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: var(--mobile-width);
+            height: 47px;
+            z-index: 2000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 32px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            pointer-events: none;
+        }
+
+        /* Premium Business Background */
+        .bg-dynamic {
+            background: radial-gradient(circle at top right, #F48133 0%, #0F172A 40%, #000 100%);
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        .bg-pattern {
+            background-image: url('danang_dragon_bridge_bg_1778333910476.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            filter: blur(2px);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-premium {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1.5px solid rgba(255, 255, 255, 0.05);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .input-premium:focus {
+            background: rgba(15, 23, 42, 0.9);
+            border-color: #F48133;
+            transform: translateY(-2px);
+        }
+
+        .headline-gradient {
+            background: linear-gradient(135deg, #F48133 0%, #FF9A5A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-brand {
+            background: linear-gradient(135deg, #F48133 0%, #E06B1F 100%);
+            box-shadow: 0 10px 30px rgba(244, 129, 51, 0.3);
+        }
+
+        [x-cloak] { display: none !important; }
+
+        /* Hide Scrollbar Globally */
+        *::-webkit-scrollbar {
+            display: none;
+        }
+        * {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body x-data="{ loading: false, showPass: false }" class="antialiased">
+
+    <div class="bg-dynamic"></div>
+    <div class="bg-pattern"></div>
+
+    <!-- STATUS BAR MOCKUP -->
+    <div class="status-bar-mock">
+        <div class="flex-1">9:41</div>
+        <div class="flex gap-1.5 items-center">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+
+    <main class="w-full pt-safe px-6 flex flex-col min-h-screen">
+        
+        <!-- Header / Logo -->
+        <div class="py-8 flex flex-col items-center text-center space-y-4">
+            <div class="bg-white p-3 rounded-2xl shadow-xl shadow-brand/10 mb-2">
+                <img src="Tap Go-Photoroom.png" class="h-14 w-auto object-contain" alt="Tapgo Logo">
+            </div>
+            <div class="space-y-1">
+                <h1 class="text-3xl font-black tracking-tight uppercase">
+                    Business <span class="headline-gradient">Portal</span>
+                </h1>
+            </div>
+        </div>
+
+        <!-- Form Section -->
+        <div class="glass-panel rounded-[2.5rem] p-8 space-y-6">
+            <div class="text-center">
+                <h2 class="text-xl font-bold">Đăng nhập</h2>
+                <p class="text-white/40 text-[11px] mt-1">Vui lòng nhập thông tin Merchant ID</p>
+            </div>
+
+            <form @submit.prevent="loading = true; setTimeout(() => window.location.href='vendor_website.html', 1500)" class="space-y-5">
+                <!-- Email/ID -->
+                <div class="space-y-2">
+                    <label class="text-[10px] font-bold text-white/30 uppercase tracking-widest ml-1">Email / Merchant ID</label>
+                    <div class="relative group">
+                        <i class="fas fa-user-shield absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-brand transition-colors text-sm"></i>
+                        <input type="text" required
+                            class="w-full pl-11 pr-4 py-4 rounded-2xl outline-none input-premium font-bold text-sm"
+                            placeholder="merchant@tapgo.vn">
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center px-1">
+                        <label class="text-[10px] font-bold text-white/30 uppercase tracking-widest">Mật khẩu</label>
+                        <a href="#" class="text-[11px] font-bold text-brand hover:underline">Quên?</a>
+                    </div>
+                    <div class="relative group">
+                        <i class="fas fa-key absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-brand transition-colors text-sm"></i>
+                        <input :type="showPass ? 'text' : 'password'" required
+                            class="w-full pl-11 pr-11 py-4 rounded-2xl outline-none input-premium font-bold text-sm"
+                            placeholder="••••••••">
+                        <button type="button" @click="showPass = !showPass" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 hover:text-brand transition-all text-sm">
+                            <i class="fas" :class="showPass ? 'fa-eye-slash' : 'fa-eye'"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Options -->
+                <div class="flex items-center justify-between px-1">
+                    <label class="flex items-center gap-2 cursor-pointer group">
+                        <input type="checkbox" class="sr-only peer">
+                        <div class="w-4 h-4 rounded border border-white/10 bg-white/5 text-brand peer-checked:bg-brand peer-checked:border-brand transition-all flex items-center justify-center">
+                            <i class="fas fa-check text-[8px] text-white hidden group-has-[:checked]:block"></i>
+                        </div>
+                        <span class="text-[11px] font-bold text-white/30 group-hover:text-white/60">Ghi nhớ đăng nhập</span>
+                    </label>
+                    <div class="flex items-center gap-1 text-white/10 font-bold text-[9px] tracking-widest uppercase">
+                        <i class="fas fa-shield-check"></i>
+                        <span>Secure Node</span>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" 
+                    class="btn-brand w-full py-4 rounded-2xl text-white font-bold tracking-widest text-[11px] flex items-center justify-center gap-3 active:scale-95 transition-transform uppercase">
+                    <span x-show="!loading">Vào hệ thống quản trị</span>
+                    <div x-show="loading" class="flex gap-1.5 items-center">
+                        <span class="w-1.5 h-1.5 bg-white rounded-full animate-bounce"></span>
+                        <span class="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                        <span class="w-1.5 h-1.5 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                    </div>
+                </button>
+            </form>
+        </div>
+
+        <!-- Footer / Support -->
+        <div class="mt-auto py-10 text-center space-y-4">
+            <p class="text-white/20 text-xs font-medium">Bạn chưa là đối tác của TapGO?</p>
+            <button class="w-full py-3.5 rounded-2xl border border-white/5 bg-white/5 font-bold text-white/40 hover:bg-white/10 hover:text-white transition-all text-[10px] tracking-widest uppercase">
+                Gửi yêu cầu hợp tác ngay
+            </button>
+            <div class="flex justify-center gap-6 pt-4">
+                <a href="#" class="text-white/20 hover:text-white transition text-xs">Điều khoản</a>
+                <a href="#" class="text-white/20 hover:text-white transition text-xs">Hỗ trợ</a>
+            </div>
+        </div>
+
+    </main>
+
+</body>
+
+</html>
+
+    </main>
+
+</body>
+
+</html>
